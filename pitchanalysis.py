@@ -67,6 +67,8 @@ def graphicsworker():
 		clip = data[frame:frame+w]
 		if wty == "hanning":
 			clip *= np.hanning(w)
+		elif wty == "hamming":
+			clip *= np.hamming(w)
 		freqs = wavelab.frequencies(clip)
 
 		# update plot
@@ -157,8 +159,9 @@ canvas.show()
 tk.Label(root, font=font, text="Windowing").grid(row=1, column=0, pady=10)
 wframe = tk.Frame(root)
 wframe.grid(row=2, column=0, pady=10, sticky="n")
-tk.Radiobutton(wframe, **widgetps('rectangle', wtype)).grid(sticky="w", row=0)
-tk.Radiobutton(wframe, **widgetps('hanning'  , wtype)).grid(sticky="w", row=1)
+tk.Radiobutton(wframe, **widgetps("rectangle", wtype)).grid(sticky="w", row=0)
+tk.Radiobutton(wframe, **widgetps("hamming"  , wtype)).grid(sticky="w", row=1)
+tk.Radiobutton(wframe, **widgetps("hanning"  , wtype)).grid(sticky="w", row=2)
 
 # create the wsize controller and add it to the GUI
 tk.Label(root, font=font, text="Window Size").grid(row=1, column=1, pady=10)

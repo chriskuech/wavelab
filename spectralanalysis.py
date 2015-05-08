@@ -67,12 +67,14 @@ def update():
 		"dB": LogNorm(),
 		"-dB": NegLogNorm(),
 	}
+	windowing = {
+		"rectangle": mlab.window_none,
+		"hamming": np.hamming,
+		"hanning": mlab.window_hanning
+	}
 
-	# np.hamming could be added as another windowing type
-	windowing = mlab.window_hanning if wty == "hanning" \
-					else mlab.window_none
 	axes.cla()
-	axes.specgram(wav, Fs=44100, NFFT=w, norm=pnorm[p], window=windowing)
+	axes.specgram(wav, Fs=44100, NFFT=w, norm=pnorm[p], window=windowing[wty])
 	axes.set_xlabel("Time (sec)")
 	axes.set_ylabel("Frequency (Hz)")
 
@@ -121,8 +123,9 @@ widgetps = lambda n, v: {'variable': v, 'text': n, 'value': n, 'command': update
 tk.Label(root, font=font, text="Windowing").grid(row=1, column=0, pady=10)
 wframe = tk.Frame(root)
 wframe.grid(row=2, column=0, pady=10, sticky="n")
-tk.Radiobutton(wframe, **widgetps('rectangle', wtype)).grid(sticky="w", row=0)
-tk.Radiobutton(wframe, **widgetps('hanning'  , wtype)).grid(sticky="w", row=1)
+tk.Radiobutton(wframe, **widgetps("rectangle", wtype)).grid(sticky="w", row=0)
+tk.Radiobutton(wframe, **widgetps("hamming"  , wtype)).grid(sticky="w", row=1)
+tk.Radiobutton(wframe, **widgetps("hanning"  , wtype)).grid(sticky="w", row=2)
 
 # create the wsize controller and add it to the GUI
 tk.Label(root, font=font, text="Window Size").grid(row=1, column=1, pady=10)
